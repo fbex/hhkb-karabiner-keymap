@@ -1,0 +1,133 @@
+[
+  {
+    "backcolor": "#ffffff"
+  },
+  [
+    {
+      "c": "#aeb0b0"
+    },
+    "Esc\nInsert",
+    {
+      "c": "#e8e7e3"
+    },
+    "!\n1\n\n\nF1",
+    "@\n2\n\n\nF2",
+    "#\n3\n\n\nF3",
+    "$\n4\n\n\nF4",
+    "%\n5\n\n\nF5",
+    "^\n6\n\n\nF6",
+    "&\n7\n\n\nF7",
+    "*\n8\n\n\nF8",
+    "(\n9\n\n\nF9",
+    ")\n0\n\n\nF10",
+    "_\n-\n\n\nF11",
+    "+\n=\n\n\nF12",
+    "|\n\\",
+    "~\n`"
+  ],
+  [
+    {
+      "c": "#aeb0b0",
+      "w": 1.5
+    },
+    "Tab\nHyper",
+    {
+      "c": "#e8e7e3"
+    },
+    "Q",
+    "W",
+    "E\n\n\n\n⌥ <i class='fa fa-arrow-right'></i>",
+    "R",
+    "T",
+    "Y",
+    "U\n\n\n\nPgUp",
+    "I\n\n\n\nHome",
+    "O\n\n\n\nApp",
+    "P",
+    "{\n[",
+    "}\n]",
+    {
+      "c": "#aeb0b0",
+      "w": 1.5
+    },
+    "Backspace\nDelete"
+  ],
+  [
+    {
+      "w": 1.75
+    },
+    "Control",
+    {
+      "c": "#e8e7e3"
+    },
+    "A\n\n\n\nEnd",
+    "S",
+    "D\n\n\n\nPgDn",
+    {
+      "n": true
+    },
+    "F",
+    "G",
+    "H\n\n\n\n<i class='fa fa-arrow-left'></i>",
+    {
+      "n": true
+    },
+    "J\n\n\n\n<i class='fa fa-arrow-down'></i>",
+    "K\n\n\n\n<i class='fa fa-arrow-up'></i>",
+    "L\n\n\n\n<i class='fa fa-arrow-right'></i>",
+    ":\n;",
+    "\"\n'",
+    {
+      "c": "#aeb0b0",
+      "w": 1.75,
+      "w2": 2.25
+    },
+    "Enter"
+  ],
+  [
+    {
+      "w": 2.25
+    },
+    "Shift",
+    {
+      "c": "#e8e7e3"
+    },
+    "Z",
+    "X",
+    "C",
+    "V",
+    "B\n\n\n\n⌥ <i class='fa fa-arrow-left'></i>",
+    "N\n\n\n\nNum",
+    "M",
+    "<\n,",
+    ">\n.",
+    "?\n/",
+    {
+      "c": "#aeb0b0",
+      "w": 1.75
+    },
+    "Shift",
+    "Fn"
+  ],
+  [
+    {
+      "x": 1.5
+    },
+    "⌥",
+    {
+      "w": 1.5
+    },
+    "⌘",
+    {
+      "a": 7,
+      "w": 6
+    },
+    "SpaceFn",
+    {
+      "a": 4,
+      "w": 1.5
+    },
+    "⌘",
+    "⌥"
+  ]
+]

@@ -1,0 +1,180 @@
+[
+  {
+    "backcolor": "#ffffff"
+  },
+  [
+    {
+      "c": "#009bca"
+    },
+    "Esc\nInsert",
+    "1\nF1",
+    "2\nF2",
+    "3\nF3",
+    "4\nF4",
+    "5\nF5",
+    "6\nF6",
+    "7\nF7",
+    "8\nF8",
+    "9\nF9",
+    "0\nF10",
+    "-\nF11",
+    "=\nF12",
+    {
+      "c": "#e8e7e3",
+      "a": 7
+    },
+    "",
+    ""
+  ],
+  [
+    {
+      "c": "#aeb0b0",
+      "w": 1.5
+    },
+    "",
+    {
+      "c": "#e8e7e3"
+    },
+    "",
+    {
+      "c": "#009bca",
+      "a": 4
+    },
+    "W\n<i class='kb kb-Multimedia-Rewind'></i>",
+    "E\n<i class='kb kb-Multimedia-Play-Pause'></i>",
+    "R\n<i class='kb kb-Multimedia-FastForwar'></i>",
+    {
+      "c": "#e8e7e3",
+      "a": 7
+    },
+    "",
+    {
+      "c": "#009bca",
+      "a": 4
+    },
+    "U\nHome",
+    "U\n<i class='mss mss-Unicode-Page-Down-5'></i>",
+    "I\n<i class='mss mss-Unicode-Page-Up-5'></i>",
+    "O\nEnd",
+    "P\nPrScr",
+    {
+      "c": "#e8e7e3",
+      "a": 7
+    },
+    "",
+    "",
+    {
+      "c": "#009bca",
+      "a": 4,
+      "w": 1.5
+    },
+    "Backspace\nDelete"
+  ],
+  [
+    {
+      "c": "#aeb0b0",
+      "a": 7,
+      "w": 1.75
+    },
+    "",
+    {
+      "c": "#e26757",
+      "a": 4
+    },
+    "A\nApp",
+    {
+      "c": "#009bca"
+    },
+    "S\n<i class='kb kb-Multimedia-Mute-2'></i>",
+    "D\n<i class='kb kb-Multimedia-Volume-Down-2'></i>",
+    {
+      "n": true
+    },
+    "F\n<i class='kb kb-Multimedia-Volume-Up-2'></i>",
+    {
+      "c": "#e8e7e3",
+      "a": 7
+    },
+    "",
+    {
+      "c": "#009bca",
+      "a": 4
+    },
+    "H\n<i class='fa fa-long-arrow-left'></i>",
+    {
+      "n": true
+    },
+    "J\n<i class='fa fa-long-arrow-down'></i>",
+    "K\n<i class='fa fa-long-arrow-up'></i>",
+    "L\n<i class='fa fa-long-arrow-right'></i>",
+    {
+      "c": "#e8e7e3",
+      "a": 7
+    },
+    "",
+    "",
+    {
+      "c": "#aeb0b0",
+      "w": 1.75,
+      "w2": 2.25
+    },
+    ""
+  ],
+  [
+    {
+      "w": 2.25
+    },
+    "",
+    {
+      "c": "#e8e7e3"
+    },
+    "",
+    "",
+    {
+      "c": "#009bca",
+      "a": 4
+    },
+    "C\n<i class='kb kb-Unicode-Screen-Dim'></i>",
+    "V\n<i class='kb kb-Unicode-Screen-Bright'></i>",
+    "B\nSpace",
+    {
+      "c": "#5dcde3"
+    },
+    "N\nNum",
+    {
+      "c": "#e8e7e3",
+      "a": 7
+    },
+    "",
+    "",
+    "",
+    "",
+    {
+      "c": "#aeb0b0",
+      "w": 1.75
+    },
+    "",
+    ""
+  ],
+  [
+    {
+      "x": 1.5
+    },
+    "",
+    {
+      "w": 1.5
+    },
+    "",
+    {
+      "c": "#2790c2",
+      "w": 6
+    },
+    "(Hold Space)",
+    {
+      "c": "#aeb0b0",
+      "w": 1.5
+    },
+    "",
+    ""
+  ]
+]

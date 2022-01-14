@@ -1,0 +1,168 @@
+[
+  {
+    "backcolor": "#ffffff"
+  },
+  [
+    {
+      "c": "#aeb0b0",
+      "a": 7
+    },
+    "",
+    {
+      "c": "#ffb07b",
+      "a": 4
+    },
+    "Move\n1\n\n\n\n\nDesk",
+    "Move\n2\n\n\n\n\nDesk",
+    "Move\n3\n\n\n\n\nDesk",
+    "Move\n4\n\n\n\n\nDesk",
+    "Move\n5\n\n\n\n\nDesk",
+    "Move\n6\n\n\n\n\nDesk",
+    "Move\n7\n\n\n\n\nDesk",
+    "Move\n8\n\n\n\n\nDesk",
+    "Move\n9\n\n\n\n\nDesk",
+    "Move\n10\n\n\n\n\nDesk",
+    {
+      "c": "#e8e7e3",
+      "a": 7
+    },
+    "",
+    "",
+    "",
+    ""
+  ],
+  [
+    {
+      "c": "#ffb07b",
+      "w": 1.5
+    },
+    "(Hold Tab)",
+    {
+      "c": "#e8e7e3"
+    },
+    "",
+    "",
+    "",
+    "",
+    {
+      "c": "#ffb07b",
+      "a": 4
+    },
+    "Toggle\nFloat\n\n\nT\n\nGlobal",
+    {
+      "c": "#e8e7e3",
+      "a": 7
+    },
+    "",
+    {
+      "c": "#ffb07b",
+      "a": 4
+    },
+    "Move\n<i class='fa fa-rotate-left'></i>\n\n\nU\n\nScreen",
+    "Move\n<i class='fa fa-rotate-right'></i>\n\n\nI\n\nScreen",
+    {
+      "c": "#e8e7e3",
+      "a": 7
+    },
+    "",
+    "",
+    "",
+    "",
+    {
+      "c": "#aeb0b0",
+      "w": 1.5
+    },
+    ""
+  ],
+  [
+    {
+      "w": 1.75
+    },
+    "",
+    {
+      "c": "#e8e7e3"
+    },
+    "",
+    "",
+    "",
+    {
+      "n": true
+    },
+    "",
+    "",
+    {
+      "c": "#ffb07b",
+      "a": 4
+    },
+    "Move\n<i class='fa fa-arrow-left'></i>\n\n\nH\n\nDesk",
+    {
+      "n": true
+    },
+    "Move\n<i class='fa fa-rotate-left'></i>\n\n\nJ\n\nWin",
+    "Move\n<i class='fa fa-rotate-right'></i>\n\n\nK\n\nWin",
+    "Move\n<i class='fa fa-arrow-right'></i>\n\n\nL\n\nDesk",
+    {
+      "c": "#e8e7e3",
+      "a": 7
+    },
+    "",
+    "",
+    {
+      "c": "#aeb0b0",
+      "w": 1.75,
+      "w2": 2.25
+    },
+    ""
+  ],
+  [
+    {
+      "w": 2.25
+    },
+    "",
+    {
+      "c": "#ffb07b",
+      "a": 4
+    },
+    "Restart\n\n\n\nZ\n\nAmeth.",
+    {
+      "c": "#e8e7e3",
+      "a": 7
+    },
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    {
+      "c": "#aeb0b0",
+      "w": 1.75
+    },
+    "",
+    ""
+  ],
+  [
+    {
+      "x": 1.5
+    },
+    "",
+    {
+      "c": "#ffb07b",
+      "w": 1.5
+    },
+    "(Hold ⌘)",
+    {
+      "c": "#aeb0b0",
+      "w": 6
+    },
+    "",
+    {
+      "w": 1.5
+    },
+    "",
+    ""
+  ]
+]
