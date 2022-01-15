@@ -10,13 +10,13 @@
         "parameters": {
           "basic.simultaneous_threshold_milliseconds": 50,
           "basic.to_delayed_action_delay_milliseconds": 500,
-          "basic.to_if_alone_timeout_milliseconds": 1000,
+          "basic.to_if_alone_timeout_milliseconds": 500,
           "basic.to_if_held_down_threshold_milliseconds": 500,
           "mouse_motion_to_scroll.speed": 100
         },
         "rules": [
           {
-            "description": "Tab to Hyper/Tab",
+            "description": "Tab to Hyper/Tab (control+option+shift)",
             "manipulators": [
               {
                 "from": {
@@ -29,10 +29,10 @@
                 },
                 "to": [
                   {
-                    "key_code": "right_shift",
+                    "key_code": "right_control",
                     "modifiers": [
-                      "right_control",
-                      "right_option"
+                      "right_option",
+                      "right_shift"
                     ]
                   }
                 ],
@@ -46,53 +46,83 @@
             ]
           },
           {
-            "description": "SpaceFN: Space enables SpaceFN mode (see: https://geekhack.org/index.php?topic=51069.0)",
+            "description": "Hyper + return_or_enter launches Kitty",
             "manipulators": [
               {
-                "type": "basic",
                 "from": {
-                  "key_code": "spacebar"
+                  "key_code": "return_or_enter",
+                  "modifiers": {
+                    "mandatory": [
+                      "right_control",
+                      "right_option",
+                      "right_shift"
+                    ]
+                  }
                 },
-                "to_if_alone": [
+                "to": [
                   {
-                    "key_code": "spacebar"
+                    "shell_command": "/bin/sh $HOME/.bin/launchKitty.sh"
                   }
                 ],
-                "to_if_held_down": [
-                  {
-                    "set_variable": {
-                      "name": "spacefn_mode",
-                      "value": 1
-                    }
-                  }
-                ],
-                "to_after_key_up": [
-                  {
-                    "set_variable": {
-                      "name": "spacefn_mode",
-                      "value": 0
-                    }
-                  }
-                ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "_spacefn_mode",
-                    "value": 0
-                  }
-                ],
-                "parameters": {
-                  "basic.to_if_alone_timeout_milliseconds": 300,
-                  "basic.to_if_held_down_threshold_milliseconds": 150
-                }
+                "type": "basic"
               }
             ]
           },
           {
-            "description": "SpaceFN: Space+[hjkl] to Left, Down, Up, Right",
+            "description": "SpaceFN layer",
             "manipulators": [
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "h"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "left_arrow"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "h",
                   "modifiers": {
@@ -106,16 +136,60 @@
                     "key_code": "left_arrow"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "j"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "down_arrow"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "j",
                   "modifiers": {
@@ -129,16 +203,60 @@
                     "key_code": "down_arrow"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "k"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "up_arrow"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "k",
                   "modifiers": {
@@ -152,16 +270,60 @@
                     "key_code": "up_arrow"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "l"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "right_arrow"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "l",
                   "modifiers": {
@@ -175,21 +337,60 @@
                     "key_code": "right_arrow"
                   }
                 ],
+                "type": "basic"
+              },
+              {
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "y"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "home"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
                 "conditions": [
                   {
+                    "name": "SpaceFN",
                     "type": "variable_if",
-                    "name": "spacefn_mode",
                     "value": 1
                   }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "SpaceFN: Space+[yuio] to home, page_down, page_up, end",
-            "manipulators": [
-              {
-                "type": "basic",
+                ],
                 "from": {
                   "key_code": "y",
                   "modifiers": {
@@ -203,16 +404,60 @@
                     "key_code": "home"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "u"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "page_down"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "u",
                   "modifiers": {
@@ -226,16 +471,60 @@
                     "key_code": "page_down"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "i"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "page_up"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "i",
                   "modifiers": {
@@ -249,16 +538,60 @@
                     "key_code": "page_up"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "o"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "end"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "o",
                   "modifiers": {
@@ -272,21 +605,60 @@
                     "key_code": "end"
                   }
                 ],
+                "type": "basic"
+              },
+              {
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "escape"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "insert"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
                 "conditions": [
                   {
+                    "name": "SpaceFN",
                     "type": "variable_if",
-                    "name": "spacefn_mode",
                     "value": 1
                   }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "SpaceFN: Space+[escape,delete_or_backspace] to insert, delete_forward",
-            "manipulators": [
-              {
-                "type": "basic",
+                ],
                 "from": {
                   "key_code": "escape",
                   "modifiers": {
@@ -300,16 +672,60 @@
                     "key_code": "insert"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "delete_or_backspace"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "delete_forward"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "delete_or_backspace",
                   "modifiers": {
@@ -323,21 +739,60 @@
                     "key_code": "delete_forward"
                   }
                 ],
+                "type": "basic"
+              },
+              {
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "b"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "spacebar"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
                 "conditions": [
                   {
+                    "name": "SpaceFN",
                     "type": "variable_if",
-                    "name": "spacefn_mode",
                     "value": 1
                   }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "SpaceFN: Space+[bp] to spacebar, print_screen",
-            "manipulators": [
-              {
-                "type": "basic",
+                ],
                 "from": {
                   "key_code": "b",
                   "modifiers": {
@@ -351,16 +806,60 @@
                     "key_code": "spacebar"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "p"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "print_screen"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "p",
                   "modifiers": {
@@ -374,21 +873,60 @@
                     "key_code": "print_screen"
                   }
                 ],
+                "type": "basic"
+              },
+              {
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "s"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "consumer_key_code": "mute"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
                 "conditions": [
                   {
+                    "name": "SpaceFN",
                     "type": "variable_if",
-                    "name": "spacefn_mode",
                     "value": 1
                   }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "SpaceFN: Space+[sdf] to mute, volume_down, volume_up",
-            "manipulators": [
-              {
-                "type": "basic",
+                ],
                 "from": {
                   "key_code": "s",
                   "modifiers": {
@@ -399,19 +937,63 @@
                 },
                 "to": [
                   {
-                    "key_code": "mute"
+                    "consumer_key_code": "mute"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "d"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "consumer_key_code": "volume_decrement"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "d",
                   "modifiers": {
@@ -422,19 +1004,63 @@
                 },
                 "to": [
                   {
-                    "key_code": "volume_down"
+                    "consumer_key_code": "volume_decrement"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "f"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "consumer_key_code": "volume_increment"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "f",
                   "modifiers": {
@@ -445,24 +1071,63 @@
                 },
                 "to": [
                   {
-                    "key_code": "volume_up"
+                    "consumer_key_code": "volume_increment"
                   }
                 ],
+                "type": "basic"
+              },
+              {
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "w"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "consumer_key_code": "rewind"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
                 "conditions": [
                   {
+                    "name": "SpaceFN",
                     "type": "variable_if",
-                    "name": "spacefn_mode",
                     "value": 1
                   }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "SpaceFN: Space+[wer] to rewind, play_or_pause, fast_forward",
-            "manipulators": [
-              {
-                "type": "basic",
+                ],
                 "from": {
                   "key_code": "w",
                   "modifiers": {
@@ -473,19 +1138,63 @@
                 },
                 "to": [
                   {
-                    "key_code": "rewind"
+                    "consumer_key_code": "rewind"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "e"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "consumer_key_code": "play_or_pause"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "e",
                   "modifiers": {
@@ -496,19 +1205,63 @@
                 },
                 "to": [
                   {
-                    "key_code": "play_or_pause"
+                    "consumer_key_code": "play_or_pause"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "r"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "consumer_key_code": "fast_forward"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "r",
                   "modifiers": {
@@ -522,21 +1275,60 @@
                     "consumer_key_code": "fast_forward"
                   }
                 ],
+                "type": "basic"
+              },
+              {
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "c"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "scroll_lock"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
                 "conditions": [
                   {
+                    "name": "SpaceFN",
                     "type": "variable_if",
-                    "name": "spacefn_mode",
                     "value": 1
                   }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "SpaceFN: Space+[cv] to scroll_lock(brightness_down), pause(brightness_up)",
-            "manipulators": [
-              {
-                "type": "basic",
+                ],
                 "from": {
                   "key_code": "c",
                   "modifiers": {
@@ -550,16 +1342,60 @@
                     "key_code": "scroll_lock"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "v"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "pause"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "v",
                   "modifiers": {
@@ -573,21 +1409,60 @@
                     "key_code": "pause"
                   }
                 ],
+                "type": "basic"
+              },
+              {
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "1"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "f1"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
                 "conditions": [
                   {
+                    "name": "SpaceFN",
                     "type": "variable_if",
-                    "name": "spacefn_mode",
                     "value": 1
                   }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "SpaceFN: Space+[1-9] to F[1-9], Space+0 to F10, Space+Hyphen (-) to F11, Space+Equal Sign (=) to F12",
-            "manipulators": [
-              {
-                "type": "basic",
+                ],
                 "from": {
                   "key_code": "1",
                   "modifiers": {
@@ -601,16 +1476,60 @@
                     "key_code": "f1"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "2"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "f2"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "2",
                   "modifiers": {
@@ -624,16 +1543,60 @@
                     "key_code": "f2"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "3"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "f3"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "3",
                   "modifiers": {
@@ -647,16 +1610,60 @@
                     "key_code": "f3"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "4"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "f4"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "4",
                   "modifiers": {
@@ -670,16 +1677,60 @@
                     "key_code": "f4"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "5"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "f5"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "5",
                   "modifiers": {
@@ -693,16 +1744,60 @@
                     "key_code": "f5"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "6"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "f6"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "6",
                   "modifiers": {
@@ -716,16 +1811,60 @@
                     "key_code": "f6"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "7"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "f7"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "7",
                   "modifiers": {
@@ -739,16 +1878,60 @@
                     "key_code": "f7"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "8"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "f8"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "8",
                   "modifiers": {
@@ -762,16 +1945,60 @@
                     "key_code": "f8"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "9"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "f9"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "9",
                   "modifiers": {
@@ -785,16 +2012,60 @@
                     "key_code": "f9"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "0"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "f10"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "0",
                   "modifiers": {
@@ -808,16 +2079,60 @@
                     "key_code": "f10"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "hyphen"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "f11"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "hyphen",
                   "modifiers": {
@@ -831,16 +2146,60 @@
                     "key_code": "f11"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               },
               {
-                "type": "basic",
+                "from": {
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  },
+                  "simultaneous": [
+                    {
+                      "key_code": "spacebar"
+                    },
+                    {
+                      "key_code": "equal_sign"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "key_up_order": "strict_inverse",
+                    "to_after_key_up": [
+                      {
+                        "set_variable": {
+                          "name": "SpaceFN",
+                          "value": 0
+                        }
+                      }
+                    ]
+                  }
+                },
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 500
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "SpaceFN",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "f12"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "SpaceFN",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "equal_sign",
                   "modifiers": {
@@ -854,2729 +2213,182 @@
                     "key_code": "f12"
                   }
                 ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
+                "type": "basic"
               }
             ]
           },
           {
-            "description": "SpaceFN: Application Group",
+            "description": "Umlauts on option + a/o/u",
             "manipulators": [
               {
-                "type": "basic",
-                "from": {
-                  "key_code": "comma",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "shell_command": "open -a 'System Preferences'"
-                  }
-                ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_app_mode",
-                    "value": 1
-                  }
-                ]
-              },
-              {
-                "type": "basic",
                 "from": {
                   "key_code": "a",
                   "modifiers": {
+                    "mandatory": [
+                      "option"
+                    ],
                     "optional": [
-                      "any"
+                      "caps_lock"
                     ]
                   }
                 },
                 "to": [
                   {
-                    "set_variable": {
-                      "name": "spacefn_app_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "set_variable": {
-                      "name": "spacefn_mode",
-                      "value": 0
-                    }
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "spacefn_app_mode",
-                        "value": 0
-                      }
-                    },
-                    {
-                      "set_variable": {
-                        "name": "spacefn_mode",
-                        "value": 1
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "spacefn_app_mode",
-                        "value": 0
-                      }
-                    },
-                    {
-                      "set_variable": {
-                        "name": "spacefn_mode",
-                        "value": 1
-                      }
-                    }
-                  ]
-                },
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "spacefn_mode",
-                    "value": 1
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "SpaceFN: Disable SpaceFN mode after last typing",
-            "manipulators": [
-              {
-                "from": {
-                  "key_code": "caps_lock"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "caps_lock"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "left_control"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "left_control"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "left_shift"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "left_shift"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "left_option"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "left_option"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "left_command"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "left_command"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "right_control"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "right_control"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "right_shift"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "right_shift"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "right_option"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "right_option"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "right_command"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "right_command"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "fn"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "fn"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "return_or_enter"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "return_or_enter"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "escape"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "escape"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "delete_or_backspace"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "delete_or_backspace"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "delete_forward"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "delete_forward"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "tab"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "tab"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "spacebar"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "spacebar"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "hyphen"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "hyphen"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "equal_sign"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "equal_sign"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "open_bracket"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "open_bracket"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "close_bracket"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "close_bracket"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "backslash"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "backslash"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "non_us_pound"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "non_us_pound"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "semicolon"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "semicolon"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "quote"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "quote"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "grave_accent_and_tilde"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "grave_accent_and_tilde"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "comma"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "comma"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "period"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "period"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "slash"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "slash"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "non_us_backslash"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "non_us_backslash"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "up_arrow"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "up_arrow"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "down_arrow"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "down_arrow"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "left_arrow"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "left_arrow"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "right_arrow"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "right_arrow"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "a"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
+                    "key_code": "u",
+                    "modifiers": [
+                      "left_option"
+                    ]
                   },
                   {
                     "key_code": "a"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "b"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
                   },
                   {
-                    "key_code": "b"
+                    "key_code": "vk_none"
                   }
                 ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
                 "type": "basic"
               },
               {
                 "from": {
-                  "key_code": "c"
+                  "key_code": "a",
+                  "modifiers": {
+                    "mandatory": [
+                      "option",
+                      "shift"
+                    ]
+                  }
                 },
                 "to": [
                   {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
+                    "key_code": "u",
+                    "modifiers": [
+                      "left_option"
+                    ]
                   },
                   {
-                    "key_code": "c"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "d"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
+                    "key_code": "a",
+                    "modifiers": [
+                      "left_shift"
+                    ]
                   },
                   {
-                    "key_code": "d"
+                    "key_code": "vk_none"
                   }
                 ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
                 "type": "basic"
               },
               {
                 "from": {
-                  "key_code": "e"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "e"
+                  "key_code": "o",
+                  "modifiers": {
+                    "mandatory": [
+                      "option"
+                    ],
+                    "optional": [
+                      "caps_lock"
+                    ]
                   }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "f"
                 },
                 "to": [
                   {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "f"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "g"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "g"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "h"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "h"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "i"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "i"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "j"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "j"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "k"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "k"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "l"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "l"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "m"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "m"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "n"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "n"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "o"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
+                    "key_code": "u",
+                    "modifiers": [
+                      "left_option"
+                    ]
                   },
                   {
                     "key_code": "o"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "p"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
                   },
                   {
-                    "key_code": "p"
+                    "key_code": "vk_none"
                   }
                 ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
                 "type": "basic"
               },
               {
                 "from": {
-                  "key_code": "q"
+                  "key_code": "o",
+                  "modifiers": {
+                    "mandatory": [
+                      "option",
+                      "shift"
+                    ]
+                  }
                 },
                 "to": [
                   {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
+                    "key_code": "u",
+                    "modifiers": [
+                      "left_option"
+                    ]
                   },
                   {
-                    "key_code": "q"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "r"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
+                    "key_code": "o",
+                    "modifiers": [
+                      "left_shift"
+                    ]
                   },
                   {
-                    "key_code": "r"
+                    "key_code": "vk_none"
                   }
                 ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
                 "type": "basic"
               },
               {
                 "from": {
-                  "key_code": "s"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "s"
+                  "key_code": "u",
+                  "modifiers": {
+                    "mandatory": [
+                      "option"
+                    ],
+                    "optional": [
+                      "caps_lock"
+                    ]
                   }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "t"
                 },
                 "to": [
                   {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "t"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "u"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
+                    "key_code": "u",
+                    "modifiers": [
+                      "left_option"
+                    ]
                   },
                   {
                     "key_code": "u"
+                  },
+                  {
+                    "key_code": "vk_none"
                   }
                 ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
                 "type": "basic"
               },
               {
                 "from": {
-                  "key_code": "v"
+                  "key_code": "u",
+                  "modifiers": {
+                    "mandatory": [
+                      "option",
+                      "shift"
+                    ]
+                  }
                 },
                 "to": [
                   {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
+                    "key_code": "u",
+                    "modifiers": [
+                      "left_option"
+                    ]
                   },
                   {
-                    "key_code": "v"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "w"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
+                    "key_code": "u",
+                    "modifiers": [
+                      "left_shift"
+                    ]
                   },
                   {
-                    "key_code": "w"
+                    "key_code": "vk_none"
                   }
                 ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "x"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "x"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "y"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "y"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "z"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "z"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "1"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "1"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "2"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "2"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "3"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "3"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "4"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "4"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "5"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "5"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "6"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "6"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "7"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "7"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "8"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "8"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "9"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "9"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "0"
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "_spacefn_mode",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "0"
-                  }
-                ],
-                "to_delayed_action": {
-                  "to_if_invoked": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ],
-                  "to_if_canceled": [
-                    {
-                      "set_variable": {
-                        "name": "_spacefn_mode",
-                        "value": 0
-                      }
-                    }
-                  ]
-                },
-                "parameters": {
-                  "basic.to_delayed_action_delay_milliseconds": 200
-                },
                 "type": "basic"
               }
             ]
@@ -3587,39 +2399,28 @@
         {
           "disable_built_in_keyboard_if_exists": false,
           "fn_function_keys": [],
+          "ignore": false,
+          "manipulate_caps_lock_led": true,
+          "simple_modifications": [],
           "identifiers": {
             "is_keyboard": true,
             "is_pointing_device": false,
             "product_id": 834,
             "vendor_id": 1452
-          },
-          "ignore": false,
-          "manipulate_caps_lock_led": true,
-          "simple_modifications": [
-            {
-              "from": {
-                "key_code": "caps_lock"
-              },
-              "to": [
-                {
-                  "key_code": "left_control"
-                }
-              ]
-            }
-          ]
+          }
         },
         {
           "disable_built_in_keyboard_if_exists": false,
           "fn_function_keys": [],
+          "ignore": false,
+          "manipulate_caps_lock_led": false,
+          "simple_modifications": [],
           "identifiers": {
             "is_keyboard": true,
             "is_pointing_device": false,
             "product_id": 256,
             "vendor_id": 2131
-          },
-          "ignore": false,
-          "manipulate_caps_lock_led": true,
-          "simple_modifications": []
+          }
         }
       ],
       "fn_function_keys": [
@@ -3627,129 +2428,114 @@
           "from": {
             "key_code": "f1"
           },
-          "to": [
-            {
-              "consumer_key_code": "display_brightness_decrement"
-            }
-          ]
+          "to": {
+            "consumer_key_code": "display_brightness_decrement"
+          }
         },
         {
           "from": {
             "key_code": "f2"
           },
-          "to": [
-            {
-              "consumer_key_code": "display_brightness_increment"
-            }
-          ]
+          "to": {
+            "consumer_key_code": "display_brightness_increment"
+          }
         },
         {
           "from": {
             "key_code": "f3"
           },
-          "to": [
-            {
-              "apple_vendor_keyboard_key_code": "mission_control"
-            }
-          ]
+          "to": {
+            "apple_vendor_keyboard_key_code": "mission_control"
+          }
         },
         {
           "from": {
             "key_code": "f4"
           },
-          "to": [
-            {
-              "apple_vendor_keyboard_key_code": "spotlight"
-            }
-          ]
+          "to": {
+            "apple_vendor_keyboard_key_code": "spotlight"
+          }
         },
         {
           "from": {
             "key_code": "f5"
           },
-          "to": [
-            {
-              "consumer_key_code": "dictation"
-            }
-          ]
+          "to": {
+            "consumer_key_code": "dictation"
+          }
         },
         {
           "from": {
             "key_code": "f6"
           },
-          "to": [
-            {
-              "key_code": "f6"
-            }
-          ]
+          "to": {
+            "key_code": "f6"
+          }
         },
         {
           "from": {
             "key_code": "f7"
           },
-          "to": [
-            {
-              "consumer_key_code": "rewind"
-            }
-          ]
+          "to": {
+            "consumer_key_code": "rewind"
+          }
         },
         {
           "from": {
             "key_code": "f8"
           },
-          "to": [
-            {
-              "consumer_key_code": "play_or_pause"
-            }
-          ]
+          "to": {
+            "consumer_key_code": "play_or_pause"
+          }
         },
         {
           "from": {
             "key_code": "f9"
           },
-          "to": [
-            {
-              "consumer_key_code": "fast_forward"
-            }
-          ]
+          "to": {
+            "consumer_key_code": "fast_forward"
+          }
         },
         {
           "from": {
             "key_code": "f10"
           },
-          "to": [
-            {
-              "consumer_key_code": "mute"
-            }
-          ]
+          "to": {
+            "consumer_key_code": "mute"
+          }
         },
         {
           "from": {
             "key_code": "f11"
           },
-          "to": [
-            {
-              "consumer_key_code": "volume_decrement"
-            }
-          ]
+          "to": {
+            "consumer_key_code": "volume_decrement"
+          }
         },
         {
           "from": {
             "key_code": "f12"
           },
-          "to": [
-            {
-              "consumer_key_code": "volume_increment"
-            }
-          ]
+          "to": {
+            "consumer_key_code": "volume_increment"
+          }
         }
       ],
-      "name": "HHKB enhanced",
+      "name": "Default",
       "parameters": {
         "delay_milliseconds_before_open_device": 1000
       },
       "selected": true,
-      "simple_modifications": [],
+      "simple_modifications": [
+        {
+          "from": {
+            "key_code": "caps_lock"
+          },
+          "to": {
+            "key_code": "left_control"
+          }
+        }
+      ],
       "virtual_hid_keyboard": {
         "country_code": 0,
         "indicate_sticky_modifier_keys_state": true,
@@ -3773,124 +2559,100 @@
           "from": {
             "key_code": "f1"
           },
-          "to": [
-            {
-              "consumer_key_code": "display_brightness_decrement"
-            }
-          ]
+          "to": {
+            "consumer_key_code": "display_brightness_decrement"
+          }
         },
         {
           "from": {
             "key_code": "f2"
           },
-          "to": [
-            {
-              "consumer_key_code": "display_brightness_increment"
-            }
-          ]
+          "to": {
+            "consumer_key_code": "display_brightness_increment"
+          }
         },
         {
           "from": {
             "key_code": "f3"
           },
-          "to": [
-            {
-              "apple_vendor_keyboard_key_code": "mission_control"
-            }
-          ]
+          "to": {
+            "apple_vendor_keyboard_key_code": "mission_control"
+          }
         },
         {
           "from": {
             "key_code": "f4"
           },
-          "to": [
-            {
-              "apple_vendor_keyboard_key_code": "spotlight"
-            }
-          ]
+          "to": {
+            "apple_vendor_keyboard_key_code": "spotlight"
+          }
         },
         {
           "from": {
             "key_code": "f5"
           },
-          "to": [
-            {
-              "consumer_key_code": "dictation"
-            }
-          ]
+          "to": {
+            "consumer_key_code": "dictation"
+          }
         },
         {
           "from": {
             "key_code": "f6"
           },
-          "to": [
-            {
-              "key_code": "f6"
-            }
-          ]
+          "to": {
+            "key_code": "f6"
+          }
         },
         {
           "from": {
             "key_code": "f7"
           },
-          "to": [
-            {
-              "consumer_key_code": "rewind"
-            }
-          ]
+          "to": {
+            "consumer_key_code": "rewind"
+          }
         },
         {
           "from": {
             "key_code": "f8"
           },
-          "to": [
-            {
-              "consumer_key_code": "play_or_pause"
-            }
-          ]
+          "to": {
+            "consumer_key_code": "play_or_pause"
+          }
         },
         {
           "from": {
             "key_code": "f9"
           },
-          "to": [
-            {
-              "consumer_key_code": "fast_forward"
-            }
-          ]
+          "to": {
+            "consumer_key_code": "fast_forward"
+          }
         },
         {
           "from": {
             "key_code": "f10"
           },
-          "to": [
-            {
-              "consumer_key_code": "mute"
-            }
-          ]
+          "to": {
+            "consumer_key_code": "mute"
+          }
         },
         {
           "from": {
             "key_code": "f11"
           },
-          "to": [
-            {
-              "consumer_key_code": "volume_decrement"
-            }
-          ]
+          "to": {
+            "consumer_key_code": "volume_decrement"
+          }
         },
         {
           "from": {
             "key_code": "f12"
           },
-          "to": [
-            {
-              "consumer_key_code": "volume_increment"
-            }
-          ]
+          "to": {
+            "consumer_key_code": "volume_increment"
+          }
         }
       ],
-      "name": "Stock config",
+      "name": "Vanilla",
       "parameters": {
         "delay_milliseconds_before_open_device": 1000
       },
